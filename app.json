@@ -1,5 +1,6 @@
 {
   "expo": {
+    "permissions": ["CAMERA"],      
     "name": "WeEat",
     "slug": "WeEat",
     "version": "1.0.0",
@@ -12,6 +13,8 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": ["CAMERA"],
+      "package": "com.weeat",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -23,6 +26,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+        }
+      ],     
       "expo-router",
       [
         "expo-splash-screen",
@@ -33,6 +42,7 @@
           "backgroundColor": "#ffffff"
         }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true

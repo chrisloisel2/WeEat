@@ -21,6 +21,25 @@ export const getSensors = createAsyncThunk(
   }
 );
 
+/**
+ * 🔹 Créer un readings
+ */
+export const createReading = createAsyncThunk(
+  "sensor/createReading",
+  async ({ sensorId, value }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/${sensorId}/readings`, {
+        value,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Impossible de créer le relevé"
+      );
+    }
+  }
+);
+
 const sensorSlice = createSlice({
   name: "sensor",
   initialState: {
@@ -43,7 +62,23 @@ const sensorSlice = createSlice({
       .addCase(getSensors.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-      });
+      }),
+      builder
+        .addCase(createReading.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(createReading.fulfilled, (state, action) => {
+          state.isLoading = false;
+          const sensorIndex = state.sensors.findIndex(
+            (sensor) => sensor._id === action.payload._id
+          );
+          state.sensors[sensorIndex] = action.payload;
+        })
+        .addCase(createReading.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        });
   },
 });
 
